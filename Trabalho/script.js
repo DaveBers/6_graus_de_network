@@ -28,7 +28,7 @@ async function buildGraph() {
     return graph;
   } catch (error) {
     console.error('Erro ao construir o grafo:', error);
-    return {}; 
+    return {};
   }
 }
 
@@ -42,6 +42,7 @@ async function findShortestPath() {
   }
 
   try {
+    let modalBodyContent = '';
     const graph = await buildGraph();
 
     if (!graph) {
@@ -52,23 +53,29 @@ async function findShortestPath() {
     const paths = bfs(graph, actor1, actor2);
 
     if (paths.length > 0) {
-      const resultDiv = document.getElementById('result');
-      resultDiv.innerHTML = '<p>Caminhos encontrados:</p>';
+      modalBodyContent = '<p>Caminhos encontrados:</p>';
       paths.forEach(path => {
-        resultDiv.innerHTML += `<p>${path.join(' -> ')}</p>`;
+        modalBodyContent += `<p>${path.join(' -> ')}</p>`;
       });
     } else {
-      const resultDiv = document.getElementById('result');
-      resultDiv.innerHTML = '<p>Não foi encontrado um caminho entre os atores selecionados.</p>';
+      modalBodyContent = '<p>Não foi encontrado um caminho entre os atores selecionados.</p>';
     }
+
+    document.getElementById('result').innerHTML = modalBodyContent;
+
+    document.getElementById('myModal').style.display = 'block';
   } catch (error) {
     console.error('Erro ao encontrar o caminho mínimo:', error);
   }
 }
 
+function fecharModal() {
+  document.getElementById('myModal').style.display = 'none';
+}
+
 function bfs(graph, startActor, endActor) {
   const queue = [[startActor, [startActor]]];
-  const paths = []; 
+  const paths = [];
   const visited = new Set();
 
   while (queue.length > 0) {
@@ -106,19 +113,24 @@ async function findSixDegreesOfSeparation() {
   }
 
   try {
+    let modalBodyContent = '';
     const graph = await buildGraph();
     const paths = bfs(graph, actor1, actor2);
 
     if (paths.length > 0) {
-      const resultDiv = document.getElementById('result');
-      resultDiv.innerHTML = '<p>Relacionamentos com até 6 graus de separação:</p>';
+      modalBodyContent = '<p>Relacionamentos com até 6 graus de separação:</p>';
       paths.forEach(path => {
-        resultDiv.innerHTML += `<p>${path.join(' -> ')}</p>`;
+        modalBodyContent += `<p>${path.join(' -> ')}</p>`;
       });
     } else {
       const resultDiv = document.getElementById('result');
-      resultDiv.innerHTML = '<p>Não foram encontrados relacionamentos com até 6 graus de separação.</p>';
+      modalBodyContent = '<p>Não foram encontrados relacionamentos com até 6 graus de separação.</p>';
     }
+
+    document.getElementById('result').innerHTML = modalBodyContent;
+
+    document.getElementById('myModal').style.display = 'block';
+
   } catch (error) {
     console.error('Erro ao encontrar relacionamentos com até 6 graus de separação:', error);
   }
